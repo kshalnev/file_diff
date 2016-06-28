@@ -9,5 +9,12 @@ TEMPLATE = app
 
 SOURCES += \
     main.cpp \
+    lcs.cpp \
+    diff.cpp \
+    processor.cpp \
 
 HEADERS += \
+    main.h \
+    lcs.h \
+    diff.h \
+    processor.h \
