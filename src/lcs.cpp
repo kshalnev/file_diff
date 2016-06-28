@@ -5,46 +5,42 @@ size_t LongestCommonSubstring(std::vector<char> const & a,
 {
   if (a.empty() || b.empty())
     return 0;
+  
+  if (a.size() > b.size())
+    return LongestCommonSubstring(b, a);
 
-  std::vector<char> const & s = (a.size() >= b.size()) ? b : a; // x
-  std::vector<char> const & l = (a.size() >= b.size()) ? a : b; // y
+  size_t const w = a.size(); // x
+  size_t const h = b.size(); // y
 
-  size_t const w = s.size(); // x
-  size_t const h = l.size(); // y
-
-  std::vector<size_t> curr(w, 0);
-  std::vector<size_t> prev(w, 0);
+  std::vector<size_t> dp(w, 0);
+  std::vector<size_t> dpprev(w, 0);
 
   size_t len = 0;
   size_t pos = 0; // pos on x
 
   for (size_t y = 0; y < h; ++y)
   {
-    const char ly = l[y];
     for (size_t x = 0; x < w; ++x)
     {
-      size_t & cx = curr[x];
-      if (ly == s[x])
+      if (a[x] == b[y])
       {
-        if (x == 0 || y == 0)
-            cx = 1;
-        else
-            cx = prev[x - 1] + 1;
+        dp[x] = (x == 0 || y == 0) ? 1 : (dpprev[x - 1] + 1);
 
-        if (len < cx)
+        if (len < dp[x])
         {
-          len = cx;
+          len = dp[x];
           pos = x - len + 1;
         }
       }
       else
       {
-        cx = 0;
+        dp[x] = 0;
       }
     }
-    prev.swap(curr);
+    
+    dpprev.swap(dp);
   }
 
-  // the substring is vector<char>(s.begin() + pos, s.begin() + pos + len);
+  // the substring is vector<char>(a.begin() + pos, a.begin() + pos + len);
   return len;
 }
